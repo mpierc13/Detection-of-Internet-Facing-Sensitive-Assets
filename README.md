@@ -83,7 +83,7 @@ DeviceLogonEvents
 
 ---
 
-The only successful remote/network logins in the last 30 days for 'labuser' account (57 total):
+The only successful remote/network logins in the last 30 days for 'labuser' account (8 total):
 
 ```kql
 DeviceLogonEvents
