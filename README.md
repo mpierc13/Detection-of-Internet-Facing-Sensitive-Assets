@@ -63,7 +63,8 @@ DeviceLogonEvents
 | order by Attempts
 ```
 
-![image](https://github.com/user-attachments/assets/dcd27b6e-fd12-41fb-b376-0b1429c7eebf)
+![image](https://github.com/user-attachments/assets/b972a094-9fe7-40a8-baac-a7cfc5487644)
+
 
 
 ---
@@ -71,7 +72,7 @@ DeviceLogonEvents
 The top 5 most failed login attempt IP addresses have not been able to successfully break into VM.
 
 ```kql
-let RemoteIPsInQuestion = dynamic(["87.251.75.99","194.180.49.96", "194.180.48.11", "149.102.152.2", "141.98.11.191", "92.63.197.55", "185.7.214.87"]);
+let RemoteIPsInQuestion = dynamic(["91.238.181.40","88.214.25.117", "147.45.112.29", "185.42.12.205", "88.214.25.112"]);
 DeviceLogonEvents
 | where LogonType has_any("Network", "Interactive", "RemoteInteractive", "Unlock")
 | where ActionType == "LogonSuccess"
@@ -106,7 +107,7 @@ DeviceLogonEvents
 
 ---
 
-We checked all of the successful login IP addresses for the 'labuser' account to see if any of them were unusual or from an unexpected location. All were normal.
+I checked all of the successful login IP addresses for the 'labuser' account to see if any of them were unusual or from an unexpected location. All were normal.
 
 ```kql
 DeviceLogonEvents
@@ -117,7 +118,8 @@ DeviceLogonEvents
 | summarize LoginCount = count() by DeviceName, ActionType, AccountName, RemoteIP
 ```
 
-![Successful Logins](https://github.com/user-attachments/assets/15512ee9-41d7-4fc2-8f5b-abae6948ff04)
+![image](https://github.com/user-attachments/assets/9e99e711-bc15-4e82-be69-29fc8b70f25c)
+
 
 ---
 
@@ -127,24 +129,19 @@ Here's how the relevant TTPs and detection elements can be organized into a char
 
 ---
 
-# 🛡️ MITRE ATT&CK TTPs for Incident Detection
+# MITRE ATT&CK TTPs for Incident Detection
 
-| **TTP ID** | **TTP Name**                     | **Description**                                                                                          | **Detection Relevance**                                                         |
-|------------|-----------------------------------|----------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
-| T1071      | Application Layer Protocol        | Observing network traffic and identifying misconfigurations (e.g., device exposed to the internet).       | Helps detect exposed devices via application protocols, identifying misconfigurations. |
-| T1075      | Pass the Hash                     | Failed login attempts suggesting brute-force or password spraying attempts.                               | Identifies failed login attempts from external sources, indicative of password spraying.  |
-| T1110      | Brute Force                       | Multiple failed login attempts from external sources trying to gain unauthorized access.                 | Identifies brute-force login attempts and suspicious login behavior.            |
-| T1046      | Network Service Scanning          | Exposure of internal services to the internet, potentially scanned by attackers.                         | Indicates potential reconnaissance and scanning by external actors.            |
-| T1021      | Remote Services                   | Remote logins via network/interactive login types showing external interaction attempts.                   | Identifies legitimate and malicious remote service logins to an exposed device.  |
-| T1070      | Indicator Removal on Host         | No indicators of success in the attempted brute-force attacks, showing system defenses were effective.     | Confirms the lack of successful attacks due to effective defense measures.      |
-| T1213      | Data from Information Repositories| Device exposed publicly, indicating potential reconnaissance activities.                                  | Exposes possible adversary reconnaissance when a device is publicly accessible.  |
-| T1078      | Valid Accounts                    | Successful logins from the legitimate account ('labuser') were normal and monitored.                      | Monitors legitimate access and excludes unauthorized access attempts.           |
-
+| Technique ID | Technique Name                       | Description                                                                                          | Detection Notes                                                                 |
+|--------------|--------------------------------------|------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|
+| T1190        | Exploit Public-Facing Application    | Due to the internet-facing nature of the machine, it was targeted using a known or suspected exploit.| Indicates initial access via vulnerabilities in public-facing applications.     |
+| T1110        | Brute Force                          | Failed login attempts from multiple IP addresses suggest credential guessing attempts.               | Detects brute-force attempts based on repeated failed logins from various IPs.   |
+| T1078        | Valid Accounts                       | Successful logons by legitimate account 'labuser'.                                                   | Monitors use of valid credentials potentially compromised through brute force.   |
+| T1587.001    | Develop Capabilities: Exploit Code   | Indirect inference from multiple bad actors attempting logins using automated tools or shared code.  | Suggests adversaries are leveraging shared or custom exploit code/tooling.       |
 ---
 
 This chart clearly organizes the MITRE ATT&CK techniques (TTPs) used in this incident, detailing their relevance to the detection process.
 
-**📝 Response:**  
+**Response:**  
 - Did a Audit, Malware Scan, Vulnerability Management Scan, Hardened the NSG attached to windows-target-1 to allow only RDP traffic from specific endpoints (no public internet access), Implemented account lockout policy, Implemented MFA, awaiting further instructions.
 
 ---
@@ -155,12 +152,6 @@ This chart clearly organizes the MITRE ATT&CK techniques (TTPs) used in this inc
 3. Onboard the device to Microsoft Defender for Endpoint.
 4. Verify the relevant logs (e.g., network traffic logs, exposure alerts) are being collected in MDE.
 5. Execute the KQL query in the MDE advanced hunting to confirm detection.
-
----
-
-## Supplemental:
-- **More on "Shared Services" in the context of PCI DSS**: [PCI DSS Scoping and Segmentation](https://www.pcisecuritystandards.org%2Fdocuments%2FGuidance-PCI-DSS-Scoping-and-Segmentation_v1.pdf)
-
 ---
 
 ## Created By:
