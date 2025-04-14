@@ -18,7 +18,7 @@ During routine maintenance, the security team is tasked with investigating any V
 
 ### **Timeline Overview**  
 1. **Archiving Activity:**  
-   - **Observed Behavior:**  Windows-target-1 has been internet-facing for several days, the public IPAddress was in the Logs. Last Internet facing time: `2025-01-06T19:15:05.9710276Z`
+   - **Observed Behavior:**  Windows-target-1 has been internet-facing for several days, the public IPAddress was in the Logs. Last Internet facing time: `2025-04-07T14:15:12.261765Z`
   
    - **Detection Query:**
 ```kql
@@ -42,7 +42,9 @@ DeviceProcessEvents
 
 ## Sample Output:
 
-![image](https://github.com/user-attachments/assets/82ef6e2e-f433-43b0-b86f-f193478cf84a)
+![image](https://github.com/user-attachments/assets/f5925fc4-2988-411f-b01d-1af7c6d801bf)
+
+
 
 
 ---
@@ -61,7 +63,8 @@ DeviceLogonEvents
 | order by Attempts
 ```
 
-![Brute Force Attempt](https://github.com/user-attachments/assets/17ba8bdd-bd3b-4469-a374-15046cf45b1c)
+![image](https://github.com/user-attachments/assets/dcd27b6e-fd12-41fb-b376-0b1429c7eebf)
+
 
 ---
 
