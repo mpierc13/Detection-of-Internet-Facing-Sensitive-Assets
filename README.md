@@ -42,7 +42,8 @@ DeviceProcessEvents
 
 ## Sample Output:
 
-![Screenshot 2025-01-13 152413](https://github.com/user-attachments/assets/96ce0467-2bf1-4b83-94d3-5dac66c828c6)
+![image](https://github.com/user-attachments/assets/82ef6e2e-f433-43b0-b86f-f193478cf84a)
+
 
 ---
 
